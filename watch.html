@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clock & Stopwatch</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f0f0f0;
+      text-align: center;
+      padding: 50px;
+    }
+    h1 {
+      margin-bottom: 40px;
+    }
+    .clock, .stopwatch {
+      margin: 30px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 10px;
+      width: 300px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .time-display {
+      font-size: 2em;
+      margin: 20px 0;
+    }
+    button {
+      margin: 5px;
+      padding: 10px 20px;
+      font-size: 1em;
+      border: none;
+      border-radius: 5px;
+      background-color: #007BFF;
+      color: white;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Clock & Stopwatch</h1>
+
+  <div class="clock">
+    <h2>Current Time</h2>
+    <div class="time-display" id="currentTime">00:00:00</div>
+  </div>
+
+  <div class="stopwatch">
+    <h2>Stopwatch</h2>
+    <div class="time-display" id="stopwatch">00:00:00</div>
+    <button onclick="startStopwatch()">Start</button>
+    <button onclick="stopStopwatch()">Stop</button>
+    <button onclick="resetStopwatch()">Reset</button>
+  </div>
+
+  <script>
+    // Live Clock
+    function updateClock() {
+      const now = new Date();
+      const timeString = now.toLocaleTimeString('en-GB', { hour12: false });
+      document.getElementById('currentTime').textContent = timeString;
+    }
+    setInterval(updateClock, 1000);
+    updateClock();
+
+    // Stopwatch
+    let stopwatchInterval;
+    let elapsedSeconds = 0;
+    let running = false;
+
+    function updateStopwatchDisplay() {
+      let hrs = Math.floor(elapsedSeconds / 3600);
+      let mins = Math.floor((elapsedSeconds % 3600) / 60);
+      let secs = elapsedSeconds % 60;
+
+      document.getElementById('stopwatch').textContent =
+        `${String(hrs).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function startStopwatch() {
+      if (!running) {
+        running = true;
+        stopwatchInterval = setInterval(() => {
+          elapsedSeconds++;
+          updateStopwatchDisplay();
+        }, 1000);
+      }
+    }
+
+    function stopStopwatch() {
+      running = false;
+      clearInterval(stopwatchInterval);
+    }
+
+    function resetStopwatch() {
+      stopStopwatch();
+      elapsedSeconds = 0;
+      updateStopwatchDisplay();
+    }
+
+    updateStopwatchDisplay();
+  </script>
+
+</body>
+</html>
